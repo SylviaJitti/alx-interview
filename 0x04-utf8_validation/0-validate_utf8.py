@@ -1,36 +1,27 @@
 #!/usr/bin/python3
-""" determines if a given data set represents a valid UTF-8 encoding """
-
+""" Represents a valid UTF-8 encoding. """
 
 def validUTF8(data):
-    # checks if most significant byte is 1
-    mask1 = 1 << 7
-    # checks if second most significant byte is 0
-    mask2 = 1 << 6
-    # keeps track of how many 1s before 0 occurs
+    """
+    Encode UTF-8
+    """
+
     n_bytes = 0
 
-    if not data or len(data) == 0:
-        return True
-
     for num in data:
-        mask = 1 << 7
+        bin_rep = format(num, '#010b')[-8:]
         if n_bytes == 0:
-            while (mask & num):
+            for bit in bin_rep:
+                if bit == '0':
+                    break
                 n_bytes += 1
-                mask = mask >> 1
-
             if n_bytes == 0:
                 continue
             if n_bytes == 1 or n_bytes > 4:
                 return False
         else:
-
-            if not (num & mask1 and not (num & mask2)):
+            if not (bin_rep[0] == '1' and bin_rep[1] == '0'):
                 return False
         n_bytes -= 1
 
-    if n_bytes:
-        return False
-    else:
-        return True
+    return n_bytes == 0
