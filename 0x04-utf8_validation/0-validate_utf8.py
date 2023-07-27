@@ -1,35 +1,41 @@
 #!/usr/bin/python3
 """
-Method that determines if a given data set represents a valid UTF-8 encoding.
-* Return: True if data is a valid UTF-8 encoding, else return False
-* A character in UTF-8 can be 1 to 4 bytes long
-* The data set can contain multiple characters
-* The data will be represented by a list of integers
-* Each integer represents 1 byte of data, therefore you only need
-* to handle the 8 least significant bits of each integer
+    UTF-8 Validation
 """
 
 
 def validUTF8(data):
-    """ UTF-8 Validation """
-    bytesLong = 0
-    binaryMoveLeft7 = 1 << 7
-    binaryMoveLeft6 = 1 << 6
-    for byte in data:
-        binaryMove = 1 << 7
-        if bytesLong == 0:
-            while byte & binaryMove:
-                bytesLong += 1
-                binaryMove = binaryMove >> 1
-            if bytesLong == 0:
-                continue
-            if bytesLong == 1 or bytesLong > 4:
-                return False
-        else:
-            if not (byte & binaryMoveLeft7 and not (byte & binaryMoveLeft6)):
-                return False
-        bytesLong -= 1
-    if bytesLong == 0:
-        return True
-    return False
+    """ Validate UTF-8 Encodings """
+    num_bytes = 0
+    for num in data:
+        num = format(num, '#010b')[-8:]
 
+        # start of new char
+        if num_bytes == 0:
+            num_bytes = get_byte_count(num)-1
+            if num_bytes is None:
+                return False
+
+        # continue processing char
+        else:
+            if not num.startswith("10"):
+                return False
+            num_bytes -= 1
+
+    return num_bytes == 0
+
+
+def get_byte_count(num):
+    """ Get byte count of character """
+    prefix_dict = {
+        "0": 1,
+        "110": 2,
+        "1110": 3,
+        "11110": 4,
+        }
+
+    for prefix in prefix_dict:
+        if num.startswith(prefix):
+            return prefix_dict[prefix]
+
+    return False
