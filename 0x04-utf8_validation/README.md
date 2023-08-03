@@ -16,5 +16,5 @@ A ```README.md``` file.
 * [x] 0. UTF-8 Validation
 
 ## Software engineer
-Javier Andrés Garzón Patarroyo  
-:octocat: [GitHub](https://github.com/javierandresgp/)
+Sylvia Jitti
+:octocat: [GitHub](https://github.com/SylviaJitti/)
