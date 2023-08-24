@@ -1,23 +1,24 @@
 #!/usr/bin/python3
-""" 0. Change comes from within """
+""" Making change """
 
 
 def makeChange(coins, total):
-    """ Given a pile of coins of different values, determine the fewest number
-        of coins needed to meet a given amount total.
+    """ Returns fewest number of coins needed to meet total
     """
-    if total < 1:
-        return 0
-    coins.sort()
-    coins.reverse()
-    fewest = 0
-    for coin in coins:
-        if total <= 0:
-            break
-        buff = total // coin
-        fewest += buff
-        total -= (buff * coin)
-    if total != 0:
-        return -1
-    return fewest
 
+    if total <= 0:
+        return 0
+    else:
+        from math import trunc
+
+        coins = sorted(coins, reverse=True)
+        coin_dict = {}
+        while total is not None:
+            for c in coins:
+                if total % c == 0:
+                    coin_dict[c] = total / c
+                    return(int(sum(coin_dict.values())))
+                else:
+                    coin_dict[c] = trunc(total / float(c))
+                    total -= (c * coin_dict[c])
+            return -1
